@@ -7,12 +7,25 @@ import com.pbl4.garbageclassification.services.IGarbageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class GarbageService implements IGarbageService {
     @Autowired
     private GarbageRepository garbageRepository;
+
     @Override
-    public Long save(Garbage garbage) {
+    public List<Garbage> findAll() {
+        return garbageRepository.findAll();
+    }
+
+    @Override
+    public String save(Garbage garbage) {
         return garbageRepository.save(garbage).getGabargeId();
+    }
+
+    @Override
+    public void delete(String id) {
+
     }
 }

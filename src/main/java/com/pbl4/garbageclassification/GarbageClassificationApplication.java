@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "hello",version = "1.0.0",description = "test"))
+@OpenAPIDefinition(info = @Info(title = "Garbage Classifition",version = "1.0.0",description = "test"))
 public class GarbageClassificationApplication {
 
 	public static void main(String[] args) {

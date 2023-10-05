@@ -7,16 +7,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Document(collection = "garbage")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Garbage {
     @Id
-    private Long gabargeId;
-    private String description;
+    private String gabargeId;
     private List<Image> images;
-    private KinfOfGarbage kindOfGarbage;
+    private KindOfGarbage kindOfGarbage;
 
 }

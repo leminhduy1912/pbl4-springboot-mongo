@@ -15,7 +15,8 @@ import java.util.List;
 public class Garbage {
     @Id
     private String gabargeId;
-    private List<Image> images;
-    private KindOfGarbage kindOfGarbage;
+    private List<String> images;
+    private String kindOfGarbage;
+    private String numOfBin;
 
 }

@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +17,7 @@ import java.util.List;
 public class Garbage {
     @Id
     private String gabargeId;
-    private List<String> images;
+    private Set<String> images;
     private String kindOfGarbage;
     private String numOfBin;
 

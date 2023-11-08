@@ -59,18 +59,7 @@
   </head>
 
   <body>
-    <!-- ? Preloader Start -->
-     <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="preloader-circle"></div>
-                <div class="preloader-img pere-text">
-                    <img src="assets/img/logo/loder.png" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Preloader Start -->
+
     <header>
       <!-- Header Start -->
       <div class="header-area">
@@ -131,15 +120,14 @@
     <script src="./assets/js/popper.min.js"></script>
     <script src="./assets/js/bootstrap.min.js"></script>
   <script>
-
-      var stompClient = null;
+  var stompClient = null;
       function connect() {
         var socket = new SockJS("/garbage");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
           setConnected(true);
           console.log("Connected: " + frame);
-          stompClient.subscribe("/topic/greetings", function (greeting) {
+          stompClient.subscribe("/topic/getAllGarbages", function (greeting) {
             showGreeting(JSON.parse(greeting.body));
           });
         });
@@ -148,7 +136,7 @@
       console.log(message)
 }
       function sendName() {
-          stompClient.send("/app/hello", {}, JSON.stringify({}));
+          stompClient.send("/app/getAllGarbages", {}, JSON.stringify({}));
       }
       function disconnect() {
         if (stompClient !== null) {
@@ -167,12 +155,13 @@
       }
       function sendName() {
         stompClient.send(
-          "/app/hello",
+          "/app/getAllGarbages",
           {},
           JSON.stringify({ name: $("#name").val() })
         );
       }
       connect();
+
 
 
 

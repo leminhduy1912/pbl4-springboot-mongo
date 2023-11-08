@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 @Service
@@ -76,19 +77,7 @@ public class ImageStorage implements IImageService {
         }
     }
 
-    @Override
-    public Stream<Path> loadAll() {
-        try {
-            //list all files in storageFolder
-            //How to fix this ?
-            return Files.walk(this.storageFolder, 1)
-                    .filter(path -> !path.equals(this.storageFolder) && !path.toString().contains("._"))
-                    .map(this.storageFolder::relativize);
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Failed to load stored files", e);
-        }
-    }
+
 
     @Override
     public byte[] readFileContent(String fileName) {
@@ -110,7 +99,16 @@ public class ImageStorage implements IImageService {
     }
 
     @Override
-    public void deleteALlFiles() {
-
+    public void delete(Set<String> fileNames) {
+        try {
+            for (String fileName : fileNames) {
+                Path filePath = storageFolder.resolve(fileName);
+                Files.delete(filePath);
+            }
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to delete file: " + exception.getMessage(), exception);
+        }
     }
+
+
 }

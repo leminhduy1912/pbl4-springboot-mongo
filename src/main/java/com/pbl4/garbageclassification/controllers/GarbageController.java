@@ -28,44 +28,58 @@ public class GarbageController {
 
 
 
-//    @MessageMapping("/hello")
-//    @SendTo("/topic/greetings")
-    @GetMapping("/api/garbage")
-    public ResponseEntity<ResponeObject> getAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponeObject(200,"Querry successfully",garbageService.findAll())
-        );
-    }
+//    @MessageMapping("/getAllGarbages")
+//    @SendTo("/topic/getAllGarbages")
+//    public ResponseEntity<ResponeObject> getAll(){
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponeObject(200,"Querry successfully",garbageService.findAll())
+//        );
+//    }
+@GetMapping("/api/garbage")
+public ResponseEntity<ResponeObject> getAll(){
+    return ResponseEntity.status(HttpStatus.OK).body(
+            new ResponeObject(200,"Querry successfully",garbageService.findAll())
+    );
+}
+
+
+
     @GetMapping("/api/garbage/{id}")
     public ResponseEntity<ResponeObject> getAll(@PathVariable String id){
         boolean exist = garbageService.isExist(id);
         if(exist){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponeObject(200,"Querry by id successfully",garbageService.finbById(id))
+                    new ResponeObject(200,"Querry by id successfully",garbageService.findById(id))
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponeObject(200,"Id does not exist","")
+                new ResponeObject(500,"Id does not exist","")
         );
 
     }
     @PostMapping("/api/garbage")
-    public ResponseEntity<ResponeObject> save(@RequestBody Garbage garbage){
+    public ResponseEntity<ResponeObject> save(@RequestParam("kindOfGarbage") String kindOfGarbage,
+                                              @RequestParam("numOfBin") String numOfBin,
+                                              @RequestParam("images")MultipartFile[] files){
 
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponeObject(200,"Created successfully",garbageService.save(garbage))
+                new ResponeObject(200,"Created successfully",garbageService.save(kindOfGarbage, numOfBin, files))
         );
     }
     @PutMapping("/api/garbage/{id}")
-    public ResponseEntity<ResponeObject> update(@RequestBody Garbage garbage,@PathVariable String id){
-        boolean exist = garbageService.isExist(id);
+    public ResponseEntity<ResponeObject> update(@RequestParam("kindOfGarbage") String kindOfGarbage,
+                                                @RequestParam("garbageId") String garbageId,
+                                                @RequestParam("numOfBin") String numOfBin,
+                                                @RequestParam("images")MultipartFile[] files){
+        boolean exist = garbageService.isExist(garbageId);
         if (exist){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponeObject(200,"Updated successfully",garbageService.update(garbage))
+                    new ResponeObject(200,"Updated successfully",garbageService.update(garbageId,kindOfGarbage,numOfBin,files)
+            )
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponeObject(200,"Id does not exist","")
+                new ResponeObject(500,"Id does not exist","")
         );
     }
     @DeleteMapping("/api/garbage/{id}")

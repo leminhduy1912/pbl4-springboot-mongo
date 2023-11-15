@@ -98,6 +98,7 @@ public class GarbageService implements IGarbageService {
     public Map<String,Long> analyticKindOfGarbage() {
         Map<String,Long> result = new HashMap<>();
         result.put("Glass",countByKindOfGarbage("Glass"));
+        System.out.println("Glass" + countByKindOfGarbage("Glass"));
         result.put("Metal",countByKindOfGarbage("Metal"));
         result.put("Recycle",countByKindOfGarbage("Recycle"));
         result.put("Other",countByKindOfGarbage("Other"));

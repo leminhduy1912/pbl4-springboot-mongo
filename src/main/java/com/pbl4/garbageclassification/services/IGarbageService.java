@@ -5,6 +5,7 @@ import com.pbl4.garbageclassification.collections.Garbage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface IGarbageService {
@@ -14,4 +15,7 @@ public interface IGarbageService {
     void delete(String id);
     Garbage findById(String id);
     boolean isExist(String id);
+    Long count();
+    Long  countByKindOfGarbage(String kindOfGarbage);
+    Map<String,Long> analyticKindOfGarbage();
 }

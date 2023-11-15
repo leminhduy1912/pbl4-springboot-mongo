@@ -83,4 +83,24 @@ public class GarbageService implements IGarbageService {
         return garbageRepository.existsById(id);
 
     }
+
+    @Override
+    public Long count() {
+        return garbageRepository.count();
+    }
+
+    @Override
+    public Long countByKindOfGarbage(String kindOfGarbage) {
+        return garbageRepository.countByKindOfGarbage(kindOfGarbage);
+    }
+
+    @Override
+    public Map<String,Long> analyticKindOfGarbage() {
+        Map<String,Long> result = new HashMap<>();
+        result.put("Glass",countByKindOfGarbage("Glass"));
+        result.put("Metal",countByKindOfGarbage("Metal"));
+        result.put("Recycle",countByKindOfGarbage("Recycle"));
+        result.put("Other",countByKindOfGarbage("Other"));
+        return result;
+    }
 }

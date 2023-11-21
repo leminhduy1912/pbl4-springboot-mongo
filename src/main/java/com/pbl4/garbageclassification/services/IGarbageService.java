@@ -6,12 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public interface IGarbageService {
     List<Garbage> findAll();
     String save(String kindOfGarbage,String numOfBin, MultipartFile[] files);
-    String update(String garbageId,String kindOfGarbage,String numOfBin, MultipartFile[] files);
+//    String update(String garbageId,String kindOfGarbage,String numOfBin, MultipartFile[] files);
+    String update(Garbage garbage,MultipartFile[] files);
     void delete(String id);
     Garbage findById(String id);
     boolean isExist(String id);

@@ -11,6 +11,5 @@ public class GarbageClassificationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GarbageClassificationApplication.class, args);
-	}
-
+	//
 }

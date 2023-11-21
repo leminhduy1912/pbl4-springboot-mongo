@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
@@ -38,22 +37,23 @@ public class GarbageService implements IGarbageService {
     }
 
     @Override
-    public String update(String garbageId, String kindOfGarbage, String numOfBin, MultipartFile[] files) {
-        boolean isExist = isExist(garbageId);
+    public String update(Garbage garbage,MultipartFile[] files) {
+        boolean isExist = isExist(garbage.getGabargeId());
 
         if (isExist){
-            Garbage garbage = garbageRepository.findById(garbageId).get();
-            Set<String> fileNamesExist = garbage.getImages();
-            iImageService.delete(fileNamesExist);
+            Garbage garbageOld = garbageRepository.findById(garbage.getGabargeId()).get();
+            if(files != null){
+                Set<String> fileNamesExist = garbageOld.getImages();
+                iImageService.delete(fileNamesExist);
 
-            Set<String> images = new HashSet<>();
-            for (int i=0 ;i< files.length;i++){
-                images.add(iImageService.storeFile(files[i]));
+                Set<String> images = new HashSet<>();
+                for (int i=0 ;i< files.length;i++){
+                    images.add(iImageService.storeFile(files[i]));
+                }
+                garbageOld.setImages(images);
             }
-
-            garbage.setKindOfGarbage(kindOfGarbage);
-            garbage.setImages(images);
-            return garbageRepository.save(garbage).getGabargeId();
+            garbageOld.setKindOfGarbage(garbage.getKindOfGarbage());
+            return garbageRepository.save(garbageOld).getGabargeId();
         } else {
             return null;
         }

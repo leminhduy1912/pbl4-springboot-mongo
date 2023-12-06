@@ -21,6 +21,6 @@ public class Garbage {
     private String gabargeId;
     private Set<String> images;
     private String kindOfGarbage;
-    private String numOfBin;
+
 
 }

@@ -24,14 +24,14 @@ public class GarbageService implements IGarbageService {
     }
 
     @Override
-    public String save(String kindOfGarbage,String numOfBin, MultipartFile[] files) {
+    public String save(String kindOfGarbage, MultipartFile[] files) {
         Garbage garbage =  new Garbage();
         Set<String> imageFilesName = new HashSet<>();
         for (MultipartFile multipartFile : files){
             imageFilesName.add(iImageService.storeFile(multipartFile));
         }
         garbage.setKindOfGarbage(kindOfGarbage);
-        garbage.setNumOfBin(numOfBin);
+
         garbage.setImages(imageFilesName);
         return garbageRepository.save(garbage).getGabargeId();
     }

@@ -14,8 +14,7 @@ import java.io.IOException;
 public class GetResultAIServer {
     private final String targetUrl = "http://localhost:5000/pred";
 
-    public String callExternalApiWithFormData(MultipartFile img) throws IOException {
-       byte[] binary = img.getBytes();
+    public String callExternalApiWithFormData(byte[] binary) throws IOException {
 
         // Create MultiValueMap to represent form-data
         MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();

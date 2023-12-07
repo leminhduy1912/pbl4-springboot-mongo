@@ -19,7 +19,7 @@ import java.util.Set;
 public class Garbage {
     @Id
     private String gabargeId;
-    private Set<String> images;
+    private String image;
     private String kindOfGarbage;
 
 

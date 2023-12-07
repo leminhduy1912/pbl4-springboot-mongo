@@ -1,6 +1,7 @@
 package com.pbl4.garbageclassification.services.impl;
 
 import com.pbl4.garbageclassification.services.IQueueProcess;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -11,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
@@ -75,23 +73,28 @@ public class QueueProcess implements IQueueProcess
     }
 
     @Override
-    public void delete(Set<String> fileNames) {
+    public boolean delete() {
+        // Đường dẫn của thư mục bạn muốn xóa tất cả các tệp tin
+        String path = "C:\\Users\\minhd\\OneDrive\\Desktop\\pbl4\\garbage-classification\\queue";
         try {
-            for (String fileName : fileNames) {
-                Path filePath = storageFolder.resolve(fileName);
-                Files.delete(filePath);
-            }
-        } catch (IOException exception) {
-            throw new RuntimeException("Failed to delete file: " + exception.getMessage(), exception);
-        }
+            // Xóa tất cả các tệp tin trong thư mục
+            FileUtils.cleanDirectory(new File(path));
+
+            System.out.println("Đã xóa tất cả các tệp tin thành công.");
+            return true;
+        } catch (IOException e) {
+            System.out.println("Không thể xóa tất cả các tệp tin: " + e.getMessage());
+            return false;
     }
+    }
+
 
     @Override
     public String fileNameFirst() {
-        // Đường dẫn đến thư mục chứa file
+
         String path = "C:\\Users\\minhd\\OneDrive\\Desktop\\pbl4\\garbage-classification\\queue";
 
-        // Tạo đối tượng File cho thư mục
+
         File folder = new File(path);
 
         // Kiểm tra xem thư mục có tồn tại không
@@ -167,15 +170,14 @@ public class QueueProcess implements IQueueProcess
 
     @Override
     public byte[] readBytesOfFile(String fileName) {
-        // Đường dẫn đến thư mục chứa file
+
         String pathFolder = "C:\\Users\\minhd\\OneDrive\\Desktop\\pbl4\\garbage-classification\\queue";
-        // Tạo đối tượng Path từ đường dẫn
+
         Path path = Paths.get(pathFolder, fileName.trim());
 
         try {
-            // Đọc toàn bộ nội dung của file thành mảng byte
             byte[] bytes = Files.readAllBytes(path);
-            System.out.println("file name"+fileName);
+
             System.out.println("byte"+bytes);
            return bytes;
         } catch (IOException e) {
@@ -183,4 +185,42 @@ public class QueueProcess implements IQueueProcess
             return null;
         }
     }
+
+    @Override
+    public boolean copyingToStorageFolder(String imgName) {
+
+        // Source directory path
+        String sourceDirectory = "C:\\Users\\minhd\\OneDrive\\Desktop\\pbl4\\garbage-classification\\queue";
+
+        // Destination directory path
+        String destinationDirectory = "C:\\Users\\minhd\\OneDrive\\Desktop\\pbl4\\garbage-classification\\uploads";
+        // Create a Path object for the source image file
+        Path sourceImagePath = Paths.get(sourceDirectory, imgName);
+
+        // Create a Path object for the destination directory
+        Path destinationDirectoryPath = Paths.get(destinationDirectory);
+        try {
+            // Create the destination directory if it doesn't exist
+            if (!Files.exists(destinationDirectoryPath)) {
+                Files.createDirectories(destinationDirectoryPath);
+            }
+
+            Path destinationImagePath = destinationDirectoryPath.resolve(imgName);
+            Files.copy(sourceImagePath, destinationImagePath);
+            System.out.println("Image file copied successfully.");
+
+
+            return true;
+        } catch (FileAlreadyExistsException e) {
+            System.out.println("Destination file already exists.");
+            System.out.println("Success: false");
+            return false;
+        } catch (IOException e) {
+            System.out.println("Unable to copy image file: " + e.getMessage());
+            System.out.println("Success: false");
+            return false;
+
+        }
+    }
 }
+

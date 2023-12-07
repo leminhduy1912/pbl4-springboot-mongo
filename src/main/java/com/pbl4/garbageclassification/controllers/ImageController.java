@@ -9,8 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
+
 
 @RestController
 public class ImageController {
@@ -45,15 +44,19 @@ public class ImageController {
 
         return ResponseEntity.status(HttpStatus.OK).body(queueProcess.countImage());
     }
-    @GetMapping("api/v1/imageBytes")
-    public ResponseEntity<byte[]> getBytesOfImage(@RequestParam String imgName) throws IOException {
-        byte[] bytes = queueProcess.readBytesOfFile(imgName);
-        String result = getResultAIServer.callExternalApiWithFormData(bytes);
-        System.out.println("result" + result);
-        return ResponseEntity.status(HttpStatus.OK).body(queueProcess.readBytesOfFile(imgName));
+    @DeleteMapping("api/v1/image")
+    public ResponseEntity<Boolean> delete() {
+        return ResponseEntity.status(HttpStatus.OK).body(queueProcess.delete());
     }
+
     @GetMapping("/api/v1/imgQueueFirst")
     public ResponseEntity<String> receiveImageNameFirst() {
-        return ResponseEntity.status(HttpStatus.OK).body(queueProcess.fileNameFirst());
+        boolean isCopied = queueProcess.copyingToStorageFolder(queueProcess.fileNameFirst());
+        if (isCopied){
+            return ResponseEntity.status(HttpStatus.OK).body(queueProcess.fileNameFirst());
+        } else {
+            return null;
+        }
+
     }
 }

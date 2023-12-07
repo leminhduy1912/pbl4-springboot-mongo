@@ -24,15 +24,10 @@ public class GarbageService implements IGarbageService {
     }
 
     @Override
-    public String save(String kindOfGarbage, MultipartFile[] files) {
+    public String save(String kindOfGarbage, String fileName) {
         Garbage garbage =  new Garbage();
-        Set<String> imageFilesName = new HashSet<>();
-        for (MultipartFile multipartFile : files){
-            imageFilesName.add(iImageService.storeFile(multipartFile));
-        }
         garbage.setKindOfGarbage(kindOfGarbage);
-
-        garbage.setImages(imageFilesName);
+        garbage.setImage(fileName);
         return garbageRepository.save(garbage).getGabargeId();
     }
 
@@ -43,14 +38,14 @@ public class GarbageService implements IGarbageService {
         if (isExist){
             Garbage garbageOld = garbageRepository.findById(garbage.getGabargeId()).get();
             if(files != null){
-                Set<String> fileNamesExist = garbageOld.getImages();
-                iImageService.delete(fileNamesExist);
+                String fileNamesExist = garbageOld.getImage();
+                //iImageService.delete(fileNamesExist);
 
                 Set<String> images = new HashSet<>();
                 for (int i=0 ;i< files.length;i++){
                     images.add(iImageService.storeFile(files[i]));
                 }
-                garbageOld.setImages(images);
+                //garbageOld.setImages(images);
             }
             garbageOld.setKindOfGarbage(garbage.getKindOfGarbage());
             return garbageRepository.save(garbageOld).getGabargeId();

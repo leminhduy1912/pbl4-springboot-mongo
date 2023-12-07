@@ -8,9 +8,10 @@ public interface IQueueProcess {
     public String storeFile(MultipartFile file);
 
 
-    public void delete(Set<String> fileNames);
+    public boolean delete();
     public String fileNameFirst();
     public Integer countImage();
     public byte[] readFileContent(String fileName);
     byte[] readBytesOfFile(String fileName);
+    public boolean copyingToStorageFolder(String imgName);
 }

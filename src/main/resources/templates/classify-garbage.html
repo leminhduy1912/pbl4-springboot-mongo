@@ -100,11 +100,9 @@
           border: 1px solid #09cc7f;
           border-radius: 2rem;
         }
-        .result {
-          font-size: 3rem;
-        }
+
         #result-text {
-          font-size: 2.5rem;
+          font-size: 30px;
         }
     </style>
 </head>
@@ -157,8 +155,6 @@
     </div>
 
     <img id="previewImage" alt="Preview Image" />
-    <input id="imageVal" type="file" alt="" />
-
     <div class="result"><span id="result-text"></span></div>
 </main>
 
@@ -175,63 +171,103 @@
 
 <script>
     $(document).ready(function () {
-      let imgVal = $("#imageVal");
       let photoCheckInterval;
       toggleLoader(false);
       // Hàm thực hiện AJAX request
-      function isPhotoAdded() {
+      async function isPhotoAdded() {
         console.log("Hearing.........");
-        $.ajax({
-          url: "http://localhost:8080/api/v1/imageCount",
-          type: "GET",
-          processData: false,
-          contentType: false,
-          success: function (data) {
-            // Xử lý dữ liệu nhận được từ AJAX
-            if (data === 1) {
-              clearInterval(photoCheckInterval);
-              $.ajax({
-                url: "http://localhost:8080/api/v1/imgQueueFirst",
+        try {
+          const data = await $.ajax({
+            url: "http://localhost:8080/api/v1/imageCount",
+            type: "GET",
+            processData: false,
+            contentType: false,
+          });
+
+          if (data === 1) {
+            clearInterval(photoCheckInterval);
+            const response = await $.ajax({
+              url: "http://localhost:8080/api/v1/imgQueueFirst",
+              type: "GET",
+              processData: false,
+              contentType: false,
+            });
+
+            $("#previewImage").attr(
+              "src",
+              "http://localhost:8080/api/v1/image/" + response
+            );
+
+            const imgName = response;
+            const url =
+              "http://localhost:8080/api/v1/result?imgName=" + imgName;
+            toggleLoader(true);
+
+            const resultResponse = await $.ajax({
+              url: url,
+              type: "GET",
+              contentType: "application/json",
+              processData: false,
+              contentType: false,
+            });
+
+            let responseObject = JSON.parse(resultResponse);
+            let typeValue = responseObject.class;
+
+            $("#result-text").text(typeValue);
+
+            let form = new FormData();
+            form.append("img", imgName);
+            form.append("kindOfGarbage", typeValue);
+            if (typeValue == "recycle") {
+              await $.ajax({
+                url: "http://192.168.1.16/ar/1",
                 type: "GET",
+
                 processData: false,
                 contentType: false,
-                success: function (response) {
-                  $("#previewImage").attr(
-                    "src",
-                    "http://localhost:8080/api/v1/imageQueueFirst/" + response
-                  );
-                  // let formData = new FormData();
-                  // formData.append("imgName", response);
-                  var imgName = response;
-                  var url =
-                    "http://localhost:8080/api/v1/imageBytes?imgName=" +
-                    imgName;
-                  $.ajax({
-                    url: url,
-                    type: "GET",
-                    contentType: "application/json",
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                      console.log(response);
-                      resumeInterval();
-                    },
-                    error: function (error) {
-                      console.error("Ajax error:", error);
-                    },
-                  });
-                },
-                error: function (error) {
-                  console.error("Ajax error:", error);
-                },
               });
             }
-            console.log("Dữ liệu từ AJAX:", data);
-          },
-          error: function (xhr, status, error) {
-            console.error("Lỗi AJAX:", error);
-          },
-        });
+            await $.ajax({
+              url: "http://localhost:8080/garbage",
+              type: "POST",
+              data: form,
+              processData: false,
+              contentType: false,
+            });
+            toggleLoader(false);
+            deleteAllFile();
+          }
+
+          console.log("Dữ liệu từ AJAX:", data);
+        } catch (error) {
+          console.error("Lỗi AJAX:", error);
+        }
+      }
+
+      function deleteAllFile() {
+        let isFirstTimeDelete = true;
+        // Đặt một đợi 6 giây trước khi thực hiện đoạn mã refresh
+        if (!isFirstTimeDelete) {
+          return;
+        }
+        setTimeout(function () {
+          $("#previewImage").attr("src", "");
+          $("#result-text").text("");
+          isFirstTimeDelete = false;
+          $.ajax({
+            url: "http://localhost:8080/api/v1/image",
+            type: "DELETE",
+            success: function (response) {
+              if (response) {
+                console.log(response);
+              }
+            },
+            error: function (error) {
+              console.error("Ajax error:", error);
+            },
+          });
+        }, 6000);
       }
 
       photoCheckInterval = setInterval(isPhotoAdded, 2500);

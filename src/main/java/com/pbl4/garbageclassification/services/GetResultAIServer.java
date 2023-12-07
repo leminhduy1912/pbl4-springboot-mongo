@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class GetResultAIServer {
@@ -17,6 +18,7 @@ public class GetResultAIServer {
     public String callExternalApiWithFormData(byte[] binary) throws IOException {
 
         // Create MultiValueMap to represent form-data
+        System.out.println("bytes"+ new String(binary, StandardCharsets.UTF_8));
         MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
         formData.add("img", new HttpEntity<>(binary, getHeaders()));
         System.out.println("form-data"+ formData);

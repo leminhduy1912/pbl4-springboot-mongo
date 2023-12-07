@@ -1,24 +1,5 @@
-package com.pbl4.garbageclassification.controllers;//package com.pbl4.garbageclassification.controllers;
-//
-//
-//import com.pbl4.garbageclassification.collections.Garbage;
-//import com.pbl4.garbageclassification.results.ResponeObject;
-//import com.pbl4.garbageclassification.services.GetResultAIServer;
-//import com.pbl4.garbageclassification.services.IGarbageService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.messaging.handler.annotation.MessageMapping;
-//import org.springframework.messaging.handler.annotation.Payload;
-//import org.springframework.messaging.handler.annotation.SendTo;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.multipart.MultipartFile;
-//
-//import java.io.File;
-//import java.io.IOException;
-//
-//
+package com.pbl4.garbageclassification.controllers;
+
 //@RestController
 //public class GarbageController {
 //    @Autowired
@@ -131,6 +112,7 @@ package com.pbl4.garbageclassification.controllers;//package com.pbl4.garbagecla
 
 
 import com.pbl4.garbageclassification.services.GetResultAIServer;
+import com.pbl4.garbageclassification.services.IGarbageService;
 import com.pbl4.garbageclassification.services.IImageService;
 import com.pbl4.garbageclassification.services.IQueueProcess;
 import jakarta.servlet.http.HttpSession;
@@ -139,57 +121,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-//@RestController
-//public class GarbageController {
-//    @Autowired
-//    private IGarbageService garbageService;
-//
-//    @Autowired
-//    private GetResultAIServer getResultAIServer;
-//    @Autowired
-//    private ImageStorage imageStorage;
-//
-////    @PostMapping("/api/v1/garbage")
-////    public String postGarbage(@RequestParam("img") MultipartFile file,
-////                              RedirectAttributes redirectAttributes) {
-////        try {
-////            String imgFileName = imageStorage.storeFile(file);
-////            System.out.println("kind" + file);
-////            //model.addAttribute("img","http://localhost:8080/api/v1"+imgFileName);
-////            redirectAttributes.addFlashAttribute("img", "http://localhost:8080/api/v1"+imgFileName);
-////
-////            // Chuyển hướng đến trang HTML của Controller
-////            //ModelAndView modelAndView = new ModelAndView("forward:/htmlPage");
-////            //modelAndView.addObject("img", file);
-////            //return modelAndView;
-////            //return file.getOriginalFilename();
-//////            return "classify-garbage";
-////            return "redirect:/";
-////        } catch (Exception e) {
-////
-////            return null;
-////        }
-////    }
-//
-//
-//    @PostMapping("/api/v1/garbage")
-//    public String postGarbage() {
-//        return "hello"
-//                ;
-//    }
-//}
+
+
 
 
 @Controller
-@SessionAttributes("img")
 public class GarbageController {
     @Autowired
     private IImageService imageService;
@@ -197,6 +138,8 @@ public class GarbageController {
     private IQueueProcess queueProcess;
     @Autowired
     private GetResultAIServer getResultAIServer;
+    @Autowired
+    private IGarbageService garbageService;
 //@PostMapping("/img")
 //public ResponseEntity<String> receiveImage(@RequestBody MultipartFile imageFile) {
 //
@@ -209,9 +152,17 @@ public class GarbageController {
 
     @PostMapping("/img")
     public ResponseEntity<String> receiveImage(@RequestParam("img") MultipartFile imageFile) {
-        String fileName = queueProcess.storeFile(imageFile);
-        // Return a success response
-        return ResponseEntity.status(HttpStatus.OK).body("Image successfully received and saved.");
+        System.out.println("image receive"+ imageFile);
+        Integer numOfFile = queueProcess.countImage();
+        if (numOfFile != 0){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Proccessing,please wait and try again .....");
+        } else {
+            String fileName = queueProcess.storeFile(imageFile);
+            //String storeFile = imageService.storeFile(imageFile);
+            // Return a success response
+            return ResponseEntity.status(HttpStatus.OK).body("Image successfully received and saved.");
+        }
+
     }
     @GetMapping("/result")
     public String index(Model model, HttpSession session) {
@@ -220,12 +171,30 @@ public class GarbageController {
         model.addAttribute("img", fileName);
         return "classify-garbage";
     }
+    @GetMapping("api/v1/result")
+    public ResponseEntity<String> getBytesOfImage(@RequestParam String imgName) throws IOException {
+        byte[] bytes = queueProcess.readBytesOfFile(imgName);//
+        String result = getResultAIServer.callExternalApiWithFormData(bytes);
+        System.out.println("result" + result);
+        if (result != null){
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+        }
 
-    @PostMapping("/getResult")
-    public String getResult(@RequestParam("img") MultipartFile img) throws IOException {
-        System.out.println("json data" + img);
-        byte[] bytes = new byte[0];
-        return getResultAIServer.callExternalApiWithFormData(bytes);
+    }
+        @PostMapping("/garbage")
+    public ResponseEntity<String> save(@RequestParam("kindOfGarbage") String kindOfGarbage,
+                                       @RequestParam("img") String fileName){
+        System.out.println("img"+fileName);
+        System.out.println("kindOfGarbage"+kindOfGarbage);
+        String idGarbage = garbageService.save(kindOfGarbage,fileName.trim());
+        if (idGarbage != null){
+            return ResponseEntity.status(HttpStatus.OK).body(idGarbage);
+        } else {
+            return null;
+        }
     }
 }
 

@@ -100,10 +100,6 @@
           border: 1px solid #09cc7f;
           border-radius: 2rem;
         }
-
-        #result-text {
-          font-size: 30px;
-        }
     </style>
 </head>
 
@@ -155,7 +151,10 @@
     </div>
 
     <img id="previewImage" alt="Preview Image" />
-    <div class="result"><span id="result-text"></span></div>
+    <div class="result">
+        <span id="result-text" style="font-size: larger"></span>
+        <span id="kind-text" style="font-size: larger"></span>
+    </div>
 </main>
 
 <!-- Scroll Up -->
@@ -172,8 +171,10 @@
 <script>
     $(document).ready(function () {
       let photoCheckInterval;
+      let isIntervalActive = true;
+      let arduinoServerIP = "192.168.1.11";
       toggleLoader(false);
-      // Hàm thực hiện AJAX request
+
       async function isPhotoAdded() {
         console.log("Hearing.........");
         try {
@@ -184,8 +185,12 @@
             contentType: false,
           });
 
-          if (data === 1) {
+          if (data === 1 && isIntervalActive) {
             clearInterval(photoCheckInterval);
+            isIntervalActive = false; // Tạm dừng vòng lặp
+          }
+
+          if (data === 1) {
             const response = await $.ajax({
               url: "http://localhost:8080/api/v1/imgQueueFirst",
               type: "GET",
@@ -210,33 +215,42 @@
               processData: false,
               contentType: false,
             });
-
             let responseObject = JSON.parse(resultResponse);
             let typeValue = responseObject.class;
+            let kindValue = responseObject.type;
+            $("#result-text").text("Class Of Garbage: " + " " + typeValue);
+            $("#kind-text").text("Kind Of Garbage:" + " " + kindValue);
+            const responeDelete = await $.ajax({
+              url: "http://localhost:8080/api/v1/image",
+              type: "DELETE",
+            });
+            await moveArduino(arduinoServerIP, typeValue);
+            if (responeDelete) {
+              let form = new FormData();
+              form.append("img", imgName);
+              form.append("kindOfGarbage", typeValue);
 
-            $("#result-text").text(typeValue);
-
-            let form = new FormData();
-            form.append("img", imgName);
-            form.append("kindOfGarbage", typeValue);
-            if (typeValue == "recycle") {
               await $.ajax({
-                url: "http://192.168.1.16/ar/1",
-                type: "GET",
-
+                url: "http://localhost:8080/garbage",
+                type: "POST",
+                data: form,
                 processData: false,
                 contentType: false,
+                success: function (response) {
+                  if (response) {
+                    console.log(response);
+                    moveArduino(typeValue);
+                    toggleLoader(false);
+                    deleteImageAndResult();
+                    isIntervalActive = true; // Bật lại vòng lặp
+                    startChecking();
+                  }
+                },
+                error: function (error) {
+                  console.error("Ajax error:", error);
+                },
               });
             }
-            await $.ajax({
-              url: "http://localhost:8080/garbage",
-              type: "POST",
-              data: form,
-              processData: false,
-              contentType: false,
-            });
-            toggleLoader(false);
-            deleteAllFile();
           }
 
           console.log("Dữ liệu từ AJAX:", data);
@@ -245,35 +259,55 @@
         }
       }
 
-      function deleteAllFile() {
-        let isFirstTimeDelete = true;
-        // Đặt một đợi 6 giây trước khi thực hiện đoạn mã refresh
-        if (!isFirstTimeDelete) {
-          return;
+      function moveArduino(arduinoServerIP, typeValue) {
+        if (typeValue == "recycle") {
+          $.ajax({
+            url: "http://" + arduinoServerIP + "/ar/1",
+            type: "GET",
+            processData: false,
+            contentType: false,
+          });
         }
+        if (typeValue == "glass") {
+          $.ajax({
+            url: "http://" + arduinoServerIP + "/ar/2",
+            type: "GET",
+            processData: false,
+            contentType: false,
+          });
+        }
+        if (typeValue == "other") {
+          $.ajax({
+            url: "http://" + arduinoServerIP + "/ar/3",
+            type: "GET",
+            processData: false,
+            contentType: false,
+          });
+        }
+        if (typeValue == "hazadous") {
+          $.ajax({
+            url: "http://" + arduinoServerIP + "/ar/4",
+            type: "GET",
+            processData: false,
+            contentType: false,
+          });
+        }
+      }
+
+      function deleteImageAndResult() {
         setTimeout(function () {
           $("#previewImage").attr("src", "");
           $("#result-text").text("");
-          isFirstTimeDelete = false;
-          $.ajax({
-            url: "http://localhost:8080/api/v1/image",
-            type: "DELETE",
-            success: function (response) {
-              if (response) {
-                console.log(response);
-              }
-            },
-            error: function (error) {
-              console.error("Ajax error:", error);
-            },
-          });
-        }, 6000);
+          $("#kind-text").text("");
+        }, 2500);
       }
 
-      photoCheckInterval = setInterval(isPhotoAdded, 2500);
-      function resumeInterval() {
-        photoCheckInterval = setInterval(isPhotoAdded, 2500);
+      function startChecking() {
+        photoCheckInterval = setInterval(isPhotoAdded, 2000);
       }
+
+      startChecking();
+
       function toggleLoader(show) {
         $("#lds-ring").css("display", show ? "flex" : "none");
       }

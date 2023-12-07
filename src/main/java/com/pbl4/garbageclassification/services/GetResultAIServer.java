@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Service
 public class GetResultAIServer {
@@ -18,10 +19,12 @@ public class GetResultAIServer {
     public String callExternalApiWithFormData(byte[] binary) throws IOException {
 
         // Create MultiValueMap to represent form-data
-        System.out.println("bytes"+ new String(binary, StandardCharsets.UTF_8));
+
+        String base64String = Base64.getEncoder().encodeToString(binary);
+        System.out.println("base64"+ base64String);
         MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
-        formData.add("img", new HttpEntity<>(binary, getHeaders()));
-        System.out.println("form-data"+ formData);
+        formData.add("img", new HttpEntity<>(base64String, getHeaders()));
+
         // Create RestTemplate
         RestTemplate restTemplate = new RestTemplate();
 

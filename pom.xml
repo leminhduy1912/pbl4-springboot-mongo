@@ -58,6 +58,13 @@
 			<version>2.6</version>
 		</dependency>
 
+		<!-- Thêm thư viện Base64 -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.15</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

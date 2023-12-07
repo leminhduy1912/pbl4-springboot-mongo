@@ -124,10 +124,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
-
-
-
+import java.nio.file.Files;
 
 
 @Controller
@@ -173,8 +172,10 @@ public class GarbageController {
     }
     @GetMapping("api/v1/result")
     public ResponseEntity<String> getBytesOfImage(@RequestParam String imgName) throws IOException {
-        byte[] bytes = queueProcess.readBytesOfFile(imgName);//
-        String result = getResultAIServer.callExternalApiWithFormData(bytes);
+
+        File imageFile = new File("C:\\Users\\minhd\\OneDrive\\Desktop\\pbl4\\garbage-classification\\uploads\\"+imgName);
+        byte[] imageData = Files.readAllBytes(imageFile.toPath());//
+        String result = getResultAIServer.callExternalApiWithFormData(imageData);
         System.out.println("result" + result);
         if (result != null){
             return ResponseEntity.status(HttpStatus.OK).body(result);

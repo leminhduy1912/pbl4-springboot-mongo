@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -24,27 +25,27 @@ public class GarbageService implements IGarbageService {
     }
 
     @Override
-    public String save(String kindOfGarbage, String fileName) {
+    public String save(String kindOfGarbage, String fileName,String classOfGarbage) {
         Garbage garbage =  new Garbage();
+        garbage.setClassOfGarbage(classOfGarbage);
         garbage.setKindOfGarbage(kindOfGarbage);
         garbage.setImage(fileName);
+        garbage.setTimeCreate(LocalDateTime.now());
         return garbageRepository.save(garbage).getGabargeId();
     }
 
     @Override
-    public String update(Garbage garbage,MultipartFile[] files) {
+    public String update(Garbage garbage,MultipartFile file) {
         boolean isExist = isExist(garbage.getGabargeId());
 
         if (isExist){
             Garbage garbageOld = garbageRepository.findById(garbage.getGabargeId()).get();
-            if(files != null){
+            if(file != null){
                 String fileNamesExist = garbageOld.getImage();
                 //iImageService.delete(fileNamesExist);
 
-                Set<String> images = new HashSet<>();
-                for (int i=0 ;i< files.length;i++){
-                    images.add(iImageService.storeFile(files[i]));
-                }
+                String image  = iImageService.storeFile(file);
+
                 //garbageOld.setImages(images);
             }
             garbageOld.setKindOfGarbage(garbage.getKindOfGarbage());
@@ -90,13 +91,17 @@ public class GarbageService implements IGarbageService {
     }
 
     @Override
-    public Map<String,Long> analyticKindOfGarbage() {
+    public Long countByClassOfGarbage(String classOfGarbage) {
+        return garbageRepository.countByClassOfGarbage(classOfGarbage);
+    }
+
+    @Override
+    public Map<String,Long> analyticClassOfGarbage() {
         Map<String,Long> result = new HashMap<>();
-        result.put("Glass",countByKindOfGarbage("Glass"));
-        System.out.println("Glass" + countByKindOfGarbage("Glass"));
-        result.put("Metal",countByKindOfGarbage("Metal"));
-        result.put("Recycle",countByKindOfGarbage("Recycle"));
-        result.put("Other",countByKindOfGarbage("Other"));
+        result.put("Glass",countByClassOfGarbage("glass"));
+        result.put("Hazadous",countByClassOfGarbage("hazadous"));
+        result.put("Recycle",countByClassOfGarbage("recycle"));
+        result.put("Other",countByClassOfGarbage("other"));
         return result;
     }
 }

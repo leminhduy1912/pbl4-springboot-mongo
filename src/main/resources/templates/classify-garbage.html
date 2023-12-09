@@ -24,26 +24,35 @@
     />
 
     <!-- CSS here -->
-    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/slicknav.css" />
-    <link rel="stylesheet" href="../static/assets/css/flaticon.css" />
+
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/owl.carousel.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/slicknav.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/flaticon.css}" rel="stylesheet" />
     <link
             rel="stylesheet"
             href="../static/assets/css/progressbar_barfiller.css"
     />
-    <link rel="stylesheet" href="../static/assets/css/gijgo.css" />
-    <link rel="stylesheet" href="../static/assets/css/animate.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/animated-headline.css" />
-    <link rel="stylesheet" href="../static/assets/css/magnific-popup.css" />
-    <link
-            rel="stylesheet"
-            href="../static/assets/css/fontawesome-all.min.css"
-    />
-    <link rel="stylesheet" href="../static/assets/css/themify-icons.css" />
-    <link rel="stylesheet" href="../static/assets/css/slick.css" />
-    <link rel="stylesheet" href="../static/assets/css/nice-select.css" />
-    <link rel="stylesheet" href="../static/assets/css/style.css" />
+    <link th:href="@{/assets/css/progressbar_barfiller.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/gijgo.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/animate.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/animate.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/animate.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/fontawesome-all.min.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/themify-icons.css}" rel="stylesheet" />
+
+    <link th:href="@{/assets/css/slick.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/nice-select.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
     <style>
         #lds-ring {
           display: flex;
@@ -152,8 +161,8 @@
 
     <img id="previewImage" alt="Preview Image" />
     <div class="result">
-        <span id="result-text" style="font-size: larger"></span>
-        <span id="kind-text" style="font-size: larger"></span>
+        <span id="result-text" style="font-size: 2rem"></span>
+        <span id="kind-text" style="font-size: 2rem"></span>
     </div>
 </main>
 
@@ -218,20 +227,22 @@
             let responseObject = JSON.parse(resultResponse);
             let typeValue = responseObject.class;
             let kindValue = responseObject.type;
-            $("#result-text").text("Class Of Garbage: " + " " + typeValue);
+            $("#result-text").text(
+              "Class Of Garbage: " + " " + typeValue + "   ||   "
+            );
             $("#kind-text").text("Kind Of Garbage:" + " " + kindValue);
             const responeDelete = await $.ajax({
-              url: "http://localhost:8080/api/v1/image",
+              url: "http://localhost:8080/api/v1/imageQueue",
               type: "DELETE",
             });
             await moveArduino(arduinoServerIP, typeValue);
             if (responeDelete) {
               let form = new FormData();
               form.append("img", imgName);
-              form.append("kindOfGarbage", typeValue);
-
+              form.append("kindOfGarbage", kindValue);
+              form.append("classOfGarbage", typeValue);
               await $.ajax({
-                url: "http://localhost:8080/garbage",
+                url: "http://localhost:8080/api/v1/garbage",
                 type: "POST",
                 data: form,
                 processData: false,
@@ -299,11 +310,11 @@
           $("#previewImage").attr("src", "");
           $("#result-text").text("");
           $("#kind-text").text("");
-        }, 2500);
+        }, 3500);
       }
 
       function startChecking() {
-        photoCheckInterval = setInterval(isPhotoAdded, 2000);
+        photoCheckInterval = setInterval(isPhotoAdded, 50);
       }
 
       startChecking();

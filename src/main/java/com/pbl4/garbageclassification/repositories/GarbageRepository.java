@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GarbageRepository extends MongoRepository<Garbage,String> {
     long countByKindOfGarbage(String kindOfGarbage);
+    long countByClassOfGarbage(String classOfGarbage);
     long count();
 }

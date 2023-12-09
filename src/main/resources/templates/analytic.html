@@ -1,121 +1,30 @@
 <!DOCTYPE html>
-<html class="no-js" lang="zxx">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Environmental</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="app.js"></script>
-    <script src="http://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
-    <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
-            integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-    ></script>
-    <!--    <link rel="manifest" href="site.webmanifest" />-->
-    <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="../static/assets/img/favicon.ico"
-    />
-
-    <!-- CSS here -->
-    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/owl.carousel.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/slicknav.css" />
-    <link rel="stylesheet" href="../static/assets/css/flaticon.css" />
-    <link rel="stylesheet" href="../static/assets/css/progressbar_barfiller.css" />
-    <link rel="stylesheet" href="../static/assets/css/gijgo.css" />
-    <link rel="stylesheet" href="../static/assets/css/animate.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/animated-headline.css" />
-    <link rel="stylesheet" href="../static/assets/css/magnific-popup.css" />
-    <link rel="stylesheet" href="../static/assets/css/fontawesome-all.min.css" />
-    <link rel="stylesheet" href="../static/assets/css/themify-icons.css" />
-    <link rel="stylesheet" href="../static/assets/css/slick.css" />
-    <link rel="stylesheet" href="../static/assets/css/nice-select.css" />
-    <link rel="stylesheet" href="../static/assets/css/style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <style>
-        main {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-          gap: 3rem;
-          padding-top: 5rem;
-        }
-
-    </style>
-</head>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <body>
-<header>
-    <!-- Header Start -->
-    <div class="header-area">
-        <div class="main-header">
-            <div class="header-bottom header-sticky">
-                <div class="container-fluid">
-                    <div class="row align-items-center">
-                        <!-- Logo -->
-                        <div class="col-xl-2 col-lg-2">
-                            <div class="logo">
-                                <a href="index.html"
-                                ><img src="../static/assets/img/logo/logo.png" alt=""
-                                /></a>
-                            </div>
-                        </div>
-                        <div class="col-xl-10 col-lg-10">
-                            <div
-                                    class="menu-wrapper d-flex align-items-center justify-content-end"
-                            >
-                                <!-- Main-menu -->
-                                <span>Garbage Classify System</span>
-                                <!-- Header-btn -->
-                                <div class="header-right-btn d-none d-lg-block ml-20">
-                                    <a href="index.html" class="btn header-btn">HomePage</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Mobile Menu -->
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Header End -->
-</header>
-<main>
-    <canvas id="myChart" style="width:100%;max-width:600px" class=""></canvas>
-</main>
-
-
-
-
-
-
-
-
-</body>
-<!-- JS here -->
-
-<script src="../static/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-<!-- Jquery, Popper, Bootstrap -->
-<script src="../static/assets/js/vendor/jquery-1.12.4.min.js"></script>
-<script src="../static/assets/js/popper.min.js"></script>
-<script src="../static/assets/js/bootstrap.min.js"></script>
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
 <script>
-    const xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-    const yValues = [55, 49, 44, 24, 15];
-    const barColors = ["red", "green","blue","orange","brown"];
+    const responseAnalytic = $.ajax({
+              url: 'http://localhost:8080/api/v1/analytic',
+              type: "GET",
+              contentType: "application/json",
+              processData: false,
+              contentType: false,
+            });
+            console.log(responseAnalytic);
+    const xValues = ["Hazadous", "Other", "Glass", "Recycle"];
+const yValues = [55, 49, 44, 24];
+    const barColors = [
+      "#b91d47",
+      "#00aba9",
+      "#2b5797",
+      "#e8c3b9",
+      "#1e7145"
+    ];
 
     new Chart("myChart", {
-      type: "bar",
+      type: "pie",
       data: {
         labels: xValues,
         datasets: [{
@@ -124,12 +33,13 @@
         }]
       },
       options: {
-        legend: {display: false},
         title: {
           display: true,
-          text: ""
+          text: "World Wide Wine Production 2018"
         }
       }
     });
 </script>
+
+</body>
 </html>

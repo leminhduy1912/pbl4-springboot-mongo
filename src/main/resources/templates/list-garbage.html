@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Datatable plugin CSS file -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
+    <!-- jQuery library file -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+    <!-- Datatable plugin JS library file -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/assets/css/style.css}" rel="stylesheet" />
+
+
+
+    <style>
+        body {
+
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0px;
+        }
+
+        h2 {
+            padding: 2rem 0rem;
+            text-align: center;
+            color: #333;
+        }
+
+        #tableID img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #tableID th, #tableID td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        #tableID th {
+            background-color: #f2f2f2;
+        }
+
+
+        #tableID tbody tr {
+            background-color: #fff;
+        }
+
+        #tableID tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #tableID tbody tr:hover {
+            background-color: #e0e0e0;
+        }
+        /* Thêm lớp CSS để ẩn các phần cần ẩn */
+    .dataTables_length, .dataTables_filter {
+        display: none;
+    }
+    </style>
+</head>
+
+<body>
+<header>
+    <!-- Header Start -->
+    <div class="header-area">
+        <div class="main-header">
+            <div class="header-bottom header-sticky">
+                <div class="container-fluid">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo">
+                                <a href="index.html"
+                                ><img src="../static/assets/img/logo/logo.png" alt=""
+                                /></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10">
+                            <div
+                                    class="menu-wrapper d-flex align-items-center justify-content-end"
+                            >
+                                <!-- Main-menu -->
+                                <span>Garbage Classify System</span>
+                                <!-- Header-btn -->
+                                <div class="header-right-btn d-none d-lg-block ml-20">
+                                    <a href="index.html" class="btn header-btn">Classifition Page</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+</header>
+<h2>History Of Classification</h2>
+
+<!-- HTML table with student data -->
+<table id="tableID" class="display" style="width:100%">
+    <thead>
+    <tr>
+        <th>Image</th>
+        <th>Kind Garbage</th>
+        <th>Class Garbage</th>
+        <th>Time Create</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Add the image source for each student -->
+    <tr th:each="garbage : ${garbages}">
+        <td><img th:src="${'http://localhost:8080/api/v1/image/' + garbage.image}" alt="Garbage Image"></td>
+        <td th:text="${garbage.kindOfGarbage}"></td>
+        <td th:text="${garbage.classOfGarbage}"></td>
+        <td th:text="${#temporals.format(garbage.timeCreate, 'dd/MM/yyyy HH:mm:ss')}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        $('#tableID').DataTable({
+            "bLengthChange": false  // Ẩn mục chọn số lượng hiển thị
+        });
+    });
+</script>
+</body>
+</html>

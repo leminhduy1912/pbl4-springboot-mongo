@@ -9,13 +9,14 @@ import java.util.Map;
 
 public interface IGarbageService {
     List<Garbage> findAll();
-    String save(String kindOfGarbage, String fileName);
+    String save(String kindOfGarbage, String fileName,String classOfGarbage);
 //    String update(String garbageId,String kindOfGarbage,String numOfBin, MultipartFile[] files);
-    String update(Garbage garbage,MultipartFile[] files);
+    String update(Garbage garbage,MultipartFile file);
     void delete(String id);
     Garbage findById(String id);
     boolean isExist(String id);
     Long count();
     Long  countByKindOfGarbage(String kindOfGarbage);
-    Map<String,Long> analyticKindOfGarbage();
+    Long  countByClassOfGarbage(String classOfGarbage);
+    Map<String,Long> analyticClassOfGarbage();
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -21,6 +22,8 @@ public class Garbage {
     private String gabargeId;
     private String image;
     private String kindOfGarbage;
+    private String classOfGarbage;
+    private LocalDateTime timeCreate;
 
 
 }

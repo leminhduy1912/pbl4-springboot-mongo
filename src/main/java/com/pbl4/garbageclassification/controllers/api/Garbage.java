@@ -99,7 +99,7 @@ public class Garbage {
         }
     }
     @PostMapping("/img")
-    public ResponseEntity<String> receiveImage(@RequestParam("img") MultipartFile imageFile) {
+    public ResponseEntity<String> receiveImage(@RequestBody MultipartFile imageFile) {
         System.out.println("image receive" + imageFile);
         Integer numOfFile = queueProcess.countImage();
         System.out.println("num of image" + numOfFile);

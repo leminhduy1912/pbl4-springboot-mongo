@@ -14,8 +14,8 @@ import java.util.Base64;
 
 @Service
 public class GetResultAIServer {
-    private final String targetUrl = "http://localhost:5000/pred";
-    //private final String targetUrl = "http://192.168.1.15:5000/pred";
+    //private final String targetUrl = "http://localhost:5000/pred";
+    private final String targetUrl = "http://172.20.10.7:5000/pred";
     public String callExternalApiWithFormData(byte[] binary) throws IOException {
 
         // Create MultiValueMap to represent form-data

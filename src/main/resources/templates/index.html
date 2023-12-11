@@ -164,7 +164,7 @@
                 <div class="right-content">
                     <!-- img -->
                     <div class="right-img">
-                        <img src="@{/assets/img/gallery/safe_in.png}" alt="">
+                        <img th:src="@{/assets/img/gallery/safe_in.png}" alt="">
                     </div>
                   
                 </div>
@@ -188,7 +188,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="single-cases mb-40">
                             <div class="cases-img">
-                                <img src="../static/assets/img/gallery/case1.png" alt="">
+                                <img th:src="@{/assets/img/gallery/case1.png}" alt="">
                             </div>
                             <div class="cases-caption">
                                 <h3><a href="#">Wildlife in Danger</a></h3>
@@ -200,7 +200,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="single-cases mb-40">
                             <div class="cases-img">
-                                <img src="../static/assets/img/gallery/case2.png" alt="">
+                                <img th:src="@{/assets/img/gallery/case2.png}" alt="">
                             </div>
                             <div class="cases-caption">
                                 <h3><a href="#">Our Green Projects</a></h3>
@@ -213,7 +213,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="single-cases">
                             <div class="cases-img">
-                                <img src="../static/assets/img/gallery/case3.png" alt="">
+                                <img th:src="@{/assets/img/gallery/case3.png}" alt="">
                             </div>
                             <div class="cases-caption">
                                 <h3><a href="#">Forest resources are gradually limited</a></h3>
@@ -242,7 +242,7 @@
                                <div class="single-footer-caption mb-30">
                                    <!-- logo -->
                                    <div class="footer-logo mb-35">
-                                       <a href="index.html"><img src="../static/assets/img/logo/logo2_footer.png" alt=""></a>
+                                       <a href="index.html"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt=""></a>
                                    </div>
                                    <div class="footer-tittle">
                                        <div class="footer-pera">
@@ -265,10 +265,10 @@
                                <div class="footer-tittle">
                                    <h4>Contact us</h4>
                                    <ul>
-                                       <li><a href="#">consulto98@gmail.com</a></li>
-                                       <li><a href="#">76/A, Green road, NYC</a></li>
+                                       <li><a href="#">minhduyle@gmail.com</a></li>
+                                       <li><a href="#">Da Nang,Viet Nam</a></li>
                                        <li><a href="#">Privacy Policy</a></li>
-                                       <li class="number"><a href="#">(80) 783 367-3904</a></li>
+                                       <li class="number"><a href="#">0777512999</a></li>
                                    </ul>
                                </div>
                            </div>
@@ -302,48 +302,48 @@
 
     <!-- JS here -->
 
-    <script src="../static/assets/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
     <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
     <!-- Jquery, Popper, Bootstrap -->
     <script th:src="@{/assets/js/vendor/jquery-1.12.4.min.js}"></script>
-    <script th:src="@{/assets/js/vendor/popper.min.js}"></script>
-    <script th:src="@{/assets/js/vendor/bootstrap.min.js}"></script>
+    <script th:src="@{/assets/js/popper.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
     <!-- Jquery Mobile Menu -->
 
-    <script th:src="@{/assets/js/vendor/jquery.slicknav.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.slicknav.min.js}"></script>
 
     <!-- Jquery Slick , Owl-Carousel Plugins -->
-    <script th:src="@{/assets/js/vendor/owl.carousel.min.js}"></script>
-    <script th:src="@{/assets/js/vendor/slick.min.js}"></script>
+    <script th:src="@{/assets/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/assets/js/slick.min.js}"></script>
 <!--    &lt;!&ndash; One Page, Animated-HeadLin &ndash;&gt;-->
-<!--    <script src="../static/assets/js/wow.min.js"></script>-->
-<!--    <script src="../static/assets/js/animated.headline.js"></script>-->
-<!--    <script src="../static/assets/js/jquery.magnific-popup.js"></script>-->
+    <script th:src="@{/assets/js/wow.min.js}"></script>
+    <script th:src="@{/assets/js/animated.headline.js}"></script>
+    <script th:src="@{/assets/js/jquery.magnific-popup.js}"></script>
 
 <!--    &lt;!&ndash; Date Picker &ndash;&gt;-->
-<!--    <script src="../static/assets/js/gijgo.min.js"></script>-->
-<!--    &lt;!&ndash; Nice-select, sticky &ndash;&gt;-->
-<!--    <script src="../static/assets/js/jquery.nice-select.min.js"></script>-->
-<!--    <script src="../static/assets/js/jquery.sticky.js"></script>-->
-<!--    &lt;!&ndash; Progress &ndash;&gt;-->
-<!--    <script src="../static/assets/js/jquery.barfiller.js"></script>-->
+    <script th:src="@{/assets/js/gijgo.min.js}"></script>
+    <!-- Nice-select, sticky -->
+    <script th:src="@{/assets/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.sticky.js}"></script>
+    <!-- Progress -->
+    <script th:src="@{/assets/js/jquery.barfiller.js}"></script>
 <!--    -->
 <!--    &lt;!&ndash; counter , waypoint,Hover Direction &ndash;&gt;-->
-<!--    <script src="../static/assets/js/jquery.counterup.min.js"></script>-->
-<!--    <script src="../static/assets/js/waypoints.min.js"></script>-->
-<!--    <script src="../static/assets/js/jquery.countdown.min.js"></script>-->
-<!--    <script src="../static/assets/js/hover-direction-snake.min.js"></script>-->
+    <script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
+    <script th:src="@{/assets/js/waypoints.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.countdown.min.js}"></script>
+    <script th:src="@{/assets/js/hover-direction-snake.min.js}"></script>
 
 <!--    &lt;!&ndash; contact js &ndash;&gt;-->
-<!--    <script src="../static/assets/js/contact.js"></script>-->
-<!--    <script src="../static/assets/js/jquery.form.js"></script>-->
-<!--    <script src="../static/assets/js/jquery.validate.min.js"></script>-->
-<!--    <script src="../static/assets/js/mail-script.js"></script>-->
-<!--    <script src="../static/assets/js/jquery.ajaxchimp.min.js"></script>-->
-<!--    -->
+    <script th:src="@{/assets/js/contact.js}"></script>
+    <script th:src="@{/assets/js/jquery.form.js}"></script>
+    <script th:src="@{/assets/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/js/mail-script.js}"></script>
+    <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
+
 <!--    &lt;!&ndash; Jquery Plugins, main Jquery &ndash;&gt;	-->
-<!--    <script src="../static/assets/js/plugins.js"></script>-->
-<!--    <script src="../static/assets/js/main.js"></script>-->
+    <script th:src="@{/assets/js/plugins.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
     
 </body>
 </html>

@@ -49,6 +49,7 @@ public class GarbageService implements IGarbageService {
                 //garbageOld.setImages(images);
             }
             garbageOld.setKindOfGarbage(garbage.getKindOfGarbage());
+            garbageOld.setClassOfGarbage(garbage.getClassOfGarbage());
             return garbageRepository.save(garbageOld).getGabargeId();
         } else {
             return null;

@@ -41,6 +41,10 @@ public class GarbageController {
         model.addAttribute("garbages", garbageList);
         return "list-garbage";
     }
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
 
 
 

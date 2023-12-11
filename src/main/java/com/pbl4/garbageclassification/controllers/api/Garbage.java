@@ -54,7 +54,7 @@ public class Garbage {
 
     public ResponseEntity<ResponeObject> update(@RequestParam("kindOfGarbage") String kindOfGarbage,
                                                 @RequestParam("garbageId") String garbageId,
-                                                @RequestParam("classOfgarbage") String classOfGarbage,
+                                                @RequestParam("classOfGarbage") String classOfGarbage,
                                                 @RequestParam("image") MultipartFile file){
         boolean exist = garbageService.isExist(garbageId);
         if (exist){
